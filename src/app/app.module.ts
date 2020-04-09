@@ -22,6 +22,7 @@ import { TopMenuComponent } from './top-menu/top-menu.component';
 import { LoginComponent } from './login/login.component';
 import {AngularFireDatabaseModule} from "@angular/fire/database";
 import {AngularFireAuthModule} from "@angular/fire/auth";
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {AngularFireAuthModule} from "@angular/fire/auth";
   ],
   providers: [
       CoursesService,
-      NewsletterService
+      NewsletterService,
+      UserService
   ],
   bootstrap: [AppComponent]
 })
