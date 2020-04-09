@@ -24,4 +24,6 @@ export class TopMenuComponent implements OnInit {
 
     }
 
+    logout() {}
+
 }
