@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable, BehaviorSubject} from "rxjs";
 import {Lesson} from "../shared/model/lesson";
 import {Http} from "@angular/http";
+import { map, tap, publishLast, refCount } from 'rxjs/operators';
 
 @Injectable()
 export class LessonsPagerService {
@@ -22,37 +23,38 @@ export class LessonsPagerService {
     }
 
 
-    loadFirstPage(courseId: number) {
+    loadFirstPage(courseId: number): Observable<any> {
         this.courseId = courseId;
         this.currentPageNumber = 1;
-        this.loadPage(this.currentPageNumber);
+        return this.loadPage(this.currentPageNumber);
     }
 
-    previous() {
+    previous(): Observable<any> {
         if (this.currentPageNumber - 1 >= 1) {
             this.currentPageNumber -= 1;
-            this.loadPage(this.currentPageNumber);
         }
+        return this.loadPage(this.currentPageNumber);
     }
 
-    next() {
+    next(): Observable<any> {
         this.currentPageNumber += 1;
-        this.loadPage(this.currentPageNumber);
+        return this.loadPage(this.currentPageNumber);
     }
 
 
-    loadPage(pageNumber:number) {
-        this.http.get('/api/lessons', {
+    loadPage(pageNumber:number): Observable<any> {
+        return this.http.get('/api/lessons', {
             params: {
                 courseId: this.courseId,
                 pageNumber,
                 pageSize: LessonsPagerService.PAGE_SIZE
             }
-        })
-            .map(res => res.json().payload)
-            .subscribe(
-                lessons => this.subject.next(lessons)
-            );
+        }).pipe(
+            map(res => res.json().payload),
+            tap(lessons => this.subject.next(lessons)),
+            publishLast(),
+            refCount()
+        )
     }
 
 }
