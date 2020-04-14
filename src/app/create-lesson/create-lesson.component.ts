@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import { filter, tap } from 'rxjs/operators';
+import * as Cookies from 'cookies-js'
 
 @Component({
     selector: 'create-lesson',
@@ -7,6 +9,8 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
     styleUrls: ['./create-lesson.component.css']
 })
 export class CreateLessonComponent implements OnInit {
+
+    private static readonly DRAFT_COOKIE = 'create-lesson-draft';
 
     form: FormGroup;
 
@@ -21,6 +25,19 @@ export class CreateLessonComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        const draft = Cookies.get(CreateLessonComponent.DRAFT_COOKIE);
+
+        if(draft) {
+            this.form.setValue(JSON.parse(draft));
+        }
+
+        this.form.valueChanges.pipe(
+            filter(() => this.form.valid),
+            tap(validValue => Cookies.set(
+                CreateLessonComponent.DRAFT_COOKIE,
+                JSON.stringify(validValue)))
+        ).subscribe();
 
     }
 
