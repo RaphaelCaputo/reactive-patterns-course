@@ -31,6 +31,8 @@ import {MessagesService} from "./services/messages.service";
 import { CreateLessonComponent } from './create-lesson/create-lesson.component';
 import {AngularFireDatabaseModule} from "@angular/fire/database";
 import {AngularFireAuthModule} from "@angular/fire/auth";
+import { CourseDetailResolver } from './course-detail/course-detail.resolver';
+import { LoadingComponent } from './loading/loading.component';
 
 
 @NgModule({
@@ -52,7 +54,8 @@ import {AngularFireAuthModule} from "@angular/fire/auth";
         LessonDetailComponent,
         SafeUrlPipe,
         MessagesComponent,
-        CreateLessonComponent
+        CreateLessonComponent,
+        LoadingComponent
     ],
     imports: [
         BrowserModule,
@@ -69,7 +72,8 @@ import {AngularFireAuthModule} from "@angular/fire/auth";
         NewsletterService,
         UserService,
         CoursesHttpService,
-        MessagesService
+        MessagesService,
+        CourseDetailResolver
     ],
     bootstrap: [AppComponent]
 })
